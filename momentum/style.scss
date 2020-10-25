@@ -1,54 +1,8 @@
-// position
-// box-model
-// typography
-// decor
-// transition
-// animation
-// other
-
-/* * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Quicksand', sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100vh;
-  background-size: cover;
-  color: #000000;
-}
-
-.time {
-  font-size: 8rem;
-}
-
-h1 {
-  margin-bottom: 3rem;
-}
-
-h2 {
-  margin-bottom: 0.5rem;
-  opacity: 0.8;
-}
-
-@media (max-width: 700px) {
-  .time {
-    font-size: 6rem;
-  }
-}
- */
-
 html {
   font-family: 'Montserrat', Verdana, sans-serif;
   font-size: 10px;
   color: #ffffff;
-  text-shadow: 0 0 10px #000;
+  text-shadow: 0 0 5px #000000;
 }
 
 body {
@@ -60,50 +14,72 @@ body {
   width: 100vw;
   padding: 20px;
   font-size: 1.6rem;
-  background-image: url(./assets/img/main-background.jpg);
+  background-image: url(./assets/img/background/overlay.png);
+  background-image: url(./assets/img/background/evening/13.jpg);
   background-size: cover;
+  transition: background-image 1s ease-in-out;
 }
 
 header {
   display: flex;
   justify-content: space-between;
-  height: 100%;
   width: 100%;
+  white-space: nowrap;
 
   .weather {
     text-align: right;
 
     .icon {
       display: inline;
-      filter: drop-shadow(0 0 10px #000);
+      filter: drop-shadow(0 0 5px #000000);
     }
   }
 }
 
 main {
-  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
-  height: 100%;
-  width: 100%;
 
   .time {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 9;
     font-size: 6rem;
+
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 50px;
+      text-align: center;
+    }
   }
 
   .message {
     z-index: 9;
-    margin: 10px 0 20px;
+    margin: 10px 100px 20px;
     font-size: 4rem;
-    /* font-weight: 600; */
+    white-space: wrap;
 
     .name {
       position: relative;
+      white-space: nowrap;
       outline: none;
+
+      &::after {
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        display: block;
+        width: 100%;
+        height: 2px;
+        content: '';
+        background-color: #ffffff;
+      }
     }
   }
 
@@ -131,17 +107,34 @@ main {
       }
     }
   }
+}
 
-  .navigation {
-    position: absolute;
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  flex-direction: column;
+  width: 100%;
+
+  .quote {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     width: 100%;
-    padding: 0 20px;
-    filter: drop-shadow(0 0 10px #000);
-    top: 50%;
-    transform: translateY(-50%);
+    margin-bottom: 20px;
+    font-size: 3rem;
+
+    .phrase {
+      text-align: center;
+    }
+  }
+
+  .navigation {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    filter: drop-shadow(0 0 5px #000000);
 
     .left,
     .right {
@@ -164,22 +157,6 @@ main {
     .right {
       background-image: url(./assets/img/navigation/right.svg);
     }
-  }
-}
-
-footer {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  height: 100%;
-  width: 100%;
-
-  .quote {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-    font-size: 3rem;
 
     .link {
       width: 30px;
@@ -219,5 +196,59 @@ footer {
   }
   100% {
     transform: rotate(180deg);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  header {
+    font-size: 1.4rem;
+  }
+
+  main {
+    .time {
+      font-size: 3rem;
+
+      span {
+        width: 25px;
+      }
+    }
+
+    .message {
+      margin: 10px 50px 20px;
+      font-size: 2rem;
+      white-space: wrap;
+    }
+
+    .todo {
+      font-size: 1.5rem;
+    }
+  }
+
+  footer {
+    .quote {
+      font-size: 1.5rem;
+    }
+
+    .navigation {
+      .left,
+      .right {
+        width: 15px;
+        height: 15px;
+      }
+
+      .link {
+        width: 20px;
+        height: 20px;
+      }
+
+      .refresh {
+        width: 20px;
+        height: 20px;
+      }
+    }
   }
 }
