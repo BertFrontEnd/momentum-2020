@@ -6,186 +6,214 @@ html {
 }
 
 body {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-  padding: 20px;
   font-size: 1.6rem;
   background-image: url(./assets/img/background/overlay.png);
-  background-image: url(./assets/img/background/evening/13.jpg);
   background-size: cover;
   transition: background-image 1s ease-in-out;
 }
 
-header {
+.wrapper {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  white-space: nowrap;
-
-  .weather {
-    text-align: right;
-
-    .icon {
-      display: inline;
-      filter: drop-shadow(0 0 5px #000000);
-    }
-  }
-}
-
-main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  align-items: stretch;
   flex-direction: column;
-  text-align: center;
+  padding: 20px;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* width: 100vw; */
 
-  .time {
+  header {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9;
-    font-size: 6rem;
+    justify-content: space-between;
+    /* width: 100% */
+    height: 150px;
+    white-space: nowrap;
 
-    span {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 50px;
-      text-align: center;
+    .info {
+      .weather-location {
+        position: relative;
+        white-space: nowrap;
+        outline: none;
+
+        &::after {
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          display: block;
+          width: 100%;
+          height: 2px;
+          content: '';
+          background-color: #ffffff;
+        }
+      }
     }
-  }
 
-  .message {
-    z-index: 9;
-    margin: 10px 100px 20px;
-    font-size: 4rem;
-    white-space: wrap;
+    .weather {
+      text-align: right;
 
-    .name {
-      position: relative;
-      white-space: nowrap;
-      outline: none;
-
-      &::after {
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        display: block;
-        width: 100%;
-        height: 2px;
-        content: '';
-        background-color: #ffffff;
+      .icon {
+        display: inline;
+        filter: drop-shadow(0 0 5px #000000);
       }
     }
   }
 
-  .todo {
-    z-index: 9;
+  main {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    font-size: 3rem;
+    text-align: center;
 
-    .focus {
-      position: relative;
-      outline: none;
-
-      &::after {
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        display: block;
-        width: 100%;
-        height: 2px;
-        content: '';
-        background-color: #ffffff;
-      }
-    }
-  }
-}
-
-footer {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
-  flex-direction: column;
-  width: 100%;
-
-  .quote {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 20px;
-    font-size: 3rem;
-
-    .phrase {
+    .time {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9;
+      font-size: 6rem;
       text-align: center;
+
+      span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 50px;
+        text-align: center;
+      }
+    }
+
+    .message {
+      z-index: 9;
+      margin: 10px 100px 20px;
+      font-size: 4rem;
+      white-space: wrap;
+
+      .name {
+        position: relative;
+        white-space: nowrap;
+        outline: none;
+
+        &::after {
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          display: block;
+          width: 100%;
+          height: 2px;
+          content: '';
+          background-color: #ffffff;
+        }
+      }
+    }
+
+    .todo {
+      z-index: 9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 3rem;
+
+      .focus {
+        position: relative;
+        outline: none;
+
+        &::after {
+          position: absolute;
+          bottom: -2px;
+          left: 0;
+          display: block;
+          width: 100%;
+          height: 2px;
+          content: '';
+          background-color: #ffffff;
+        }
+      }
     }
   }
 
-  .navigation {
+  footer {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 100%;
-    filter: drop-shadow(0 0 5px #000000);
+    justify-content: flex-end;
+    flex-direction: column;
+    /* width: 100%; */
+    height: 150px;
 
-    .left,
-    .right {
-      display: block;
-      width: 20px;
-      height: 20px;
-      background-size: cover;
-      transition: 0.1s;
-      cursor: pointer;
+    .quote {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 20px;
+      font-size: 2rem;
 
-      &:active {
-        transform: scale(0.9);
+      .phrase {
+        text-align: center;
       }
     }
 
-    .left {
-      background-image: url(./assets/img/navigation/left.svg);
-    }
+    .navigation {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      width: 100%;
+      filter: drop-shadow(0 0 5px #000000);
 
-    .right {
-      background-image: url(./assets/img/navigation/right.svg);
-    }
+      .left,
+      .right {
+        display: block;
+        width: 20px;
+        height: 20px;
+        border: 0;
+        background-size: cover;
+        transition: 0.1s;
+        background-color: transparent;
+        cursor: pointer;
 
-    .link {
-      width: 30px;
-      height: 30px;
-      background-image: url(./assets/img/navigation/github.svg);
-      background-size: cover;
-      text-decoration: none;
-      transition: 0.1s;
-
-      &:active {
-        transform: scale(0.9);
+        &:active,
+        &:focus {
+          outline: 0;
+          transform: scale(0.9);
+        }
       }
-    }
 
-    .refresh {
-      width: 30px;
-      height: 30px;
-      background-image: url(./assets/img/navigation/refresh.svg);
-      background-size: cover;
-      transition: 0.1s;
-      cursor: pointer;
-
-      &:active {
-        transform: scale(0.9);
+      .left {
+        background-image: url(./assets/img/navigation/left.svg);
       }
-    }
 
-    .request {
-      animation: rotation 0.5s infinite linear;
+      .right {
+        background-image: url(./assets/img/navigation/right.svg);
+      }
+
+      .link {
+        width: 30px;
+        height: 30px;
+        background-image: url(./assets/img/navigation/github.svg);
+        background-size: cover;
+        text-decoration: none;
+        transition: 0.1s;
+
+        &:active {
+          transform: scale(0.9);
+        }
+      }
+
+      .refresh {
+        width: 30px;
+        height: 30px;
+        background-image: url(./assets/img/navigation/refresh.svg);
+        background-size: cover;
+        transition: 0.1s;
+        cursor: pointer;
+
+        &:active {
+          transform: scale(0.9);
+        }
+      }
+
+      .request {
+        animation: rotation 0.5s infinite linear;
+      }
     }
   }
 }
@@ -200,54 +228,52 @@ footer {
 }
 
 @media screen and (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
+  .wrapper {
+    header {
+      font-size: 1.4rem;
+    }
 
-  header {
-    font-size: 1.4rem;
-  }
+    main {
+      .time {
+        font-size: 3rem;
 
-  main {
-    .time {
-      font-size: 3rem;
+        span {
+          width: 25px;
+        }
+      }
 
-      span {
-        width: 25px;
+      .message {
+        margin: 10px 50px 20px;
+        font-size: 2rem;
+        white-space: wrap;
+      }
+
+      .todo {
+        font-size: 1.5rem;
       }
     }
 
-    .message {
-      margin: 10px 50px 20px;
-      font-size: 2rem;
-      white-space: wrap;
-    }
-
-    .todo {
-      font-size: 1.5rem;
-    }
-  }
-
-  footer {
-    .quote {
-      font-size: 1.5rem;
-    }
-
-    .navigation {
-      .left,
-      .right {
-        width: 15px;
-        height: 15px;
+    footer {
+      .quote {
+        font-size: 1.5rem;
       }
 
-      .link {
-        width: 20px;
-        height: 20px;
-      }
+      .navigation {
+        .left,
+        .right {
+          width: 15px;
+          height: 15px;
+        }
 
-      .refresh {
-        width: 20px;
-        height: 20px;
+        .link {
+          width: 20px;
+          height: 20px;
+        }
+
+        .refresh {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
   }

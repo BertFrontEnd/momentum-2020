@@ -3,6 +3,7 @@ const TIME = document.querySelector('.time');
 const LOCATION = document.querySelector('.location');
 const DAY = document.querySelector('.day');
 const DATE = document.querySelector('.date');
+const WEATHERLOCATION = document.querySelector('.weather-location');
 const NAME = document.querySelector('.name');
 const FOCUS = document.querySelector('.focus');
 const WEATHER = document.querySelector('.weather');
@@ -22,16 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
   renderDay();
   renderDate();
   renderForecast();
-  // setBgGreet();
   renderGreeting();
+  getWeatherLocation();
   getName();
   getFocus();
+  getRandomArray();
   renderBackground();
-  setInterval(() => {
-    renderBackground();
-  }, 1080000);
+  setLoop();
   renderPhrase();
 });
+
+WEATHERLOCATION.addEventListener('keypress', setValue);
+WEATHERLOCATION.addEventListener('blur', setValue);
+WEATHERLOCATION.addEventListener('click', resetWeatherLocation);
 
 NAME.addEventListener('keypress', setValue);
 NAME.addEventListener('blur', setValue);
@@ -44,8 +48,8 @@ FOCUS.addEventListener('click', resetFocus);
 REFRESH.addEventListener('click', renderPhrase);
 REFRESH.addEventListener('click', addAnimation);
 
-/* LEFT.addEventListener('click', renderBackgroundToNext);
-RIGHT.addEventListener('click', renderBackgroundPrevious); */
+RIGHT.addEventListener('click', renderBackgroundNext);
+LEFT.addEventListener('click', renderBackgroundPrevious);
 
 /* Functions */
 
@@ -156,7 +160,9 @@ function getCurrentDay() {
 
 // Render Day
 function renderDay() {
-  DAY.innerHTML = `<span>${getCurrentDay().month}, ${getCurrentDay().day}</span>`;
+  DAY.innerHTML = `<span>${getCurrentDay().month}, ${
+    getCurrentDay().day
+  }</span>`;
 }
 
 /* --------- */
@@ -166,7 +172,10 @@ function getDate() {
   const currentDate = new Date().getDate();
   const currentYear = new Date().getFullYear();
 
-  const currentNumberMonth = new Date().getMonth() < 10 ? `0${new Date().getMonth()}` : new Date().getMonth();
+  const currentNumberMonth =
+    new Date().getMonth() < 10
+      ? `0${new Date().getMonth()}`
+      : new Date().getMonth();
 
   const objectDate = {
     day: currentDate,
@@ -179,16 +188,27 @@ function getDate() {
 
 // Render Date
 function renderDate() {
-  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${getDate().year}</span>`;
+  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${
+    getDate().year
+  }</span>`;
 }
 
 /* --------- */
 
 // Get Time
 function getTime() {
-  const h = new Date().getHours() < 10 ? `0${new Date().getHours()}` : new Date().getHours();
-  const m = new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes();
-  const s = new Date().getSeconds() < 10 ? `0${new Date().getSeconds()}` : new Date().getSeconds();
+  const h =
+    new Date().getHours() < 10
+      ? `0${new Date().getHours()}`
+      : new Date().getHours();
+  const m =
+    new Date().getMinutes() < 10
+      ? `0${new Date().getMinutes()}`
+      : new Date().getMinutes();
+  const s =
+    new Date().getSeconds() < 10
+      ? `0${new Date().getSeconds()}`
+      : new Date().getSeconds();
 
   const objectTime = {
     hour: h,
@@ -214,8 +234,8 @@ function renderTime() {
 // Get Forecast
 
 function getForecast() {
-  // eslint-disable-next-line operator-linebreak
-  const urlApi = 'https://api.openweathermap.org/data/2.5/forecast?q=Minsk,by&APPID=1b6b5070efbf756fbf0bba5241bcc2db';
+  const urlApi =
+    'https://api.openweathermap.org/data/2.5/forecast?q=Minsk,by&APPID=1b6b5070efbf756fbf0bba5241bcc2db';
 
   const requestApi = fetch(urlApi)
     .then((res) => res.json())
@@ -232,11 +252,19 @@ async function renderForecast() {
   const currentForecast = await getForecast();
 
   WEATHER.innerHTML = `
-    <div class="temperature"><span>${Math.round(currentForecast.list[0].main.temp - 273.15)}°</span>
-    <img class="icon" src="./assets/img/weather/${currentForecast.list[0].weather[0].icon}.svg" alt="" width="30" /></div>
-    <div class="feels">Feels: ${Math.round(currentForecast.list[0].main.feels_like - 273.15)}°</div>
+    <div class="temperature"><span>${Math.round(
+      currentForecast.list[0].main.temp - 273.15,
+    )}°</span>
+    <img class="icon" src="./assets/img/weather/${
+      currentForecast.list[0].weather[0].icon
+    }.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(
+      currentForecast.list[0].main.feels_like - 273.15,
+    )}°</div>
     <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
-    <div class="humidity">Humidity: ${currentForecast.list[0].main.humidity}%</div>
+    <div class="humidity">Humidity: ${
+      currentForecast.list[0].main.humidity
+    }%</div>
   `;
 }
 
@@ -272,6 +300,21 @@ function renderGreeting() {
 
 /* --------- */
 
+// Get Weather Location
+function getWeatherLocation() {
+  let loc = localStorage.getItem('weather-location');
+
+  if (loc == null || loc.toString().trim() === '') {
+    WEATHERLOCATION.innerText = '[Enter Location]';
+  } else {
+    WEATHERLOCATION.innerText = loc;
+  }
+
+  return loc;
+}
+
+console.log(getWeatherLocation());
+
 // Get Name
 function getName() {
   let loc = localStorage.getItem('name');
@@ -300,15 +343,26 @@ function setValue(e) {
 
   if (e.type === 'keypress') {
     if (e.which == 13 || e.keyCode === 13) {
-      if (!target.innerText.toString().trim() == '' && !target.innerText.includes('[Enter ')) {
+      if (
+        !target.innerText.toString().trim() == '' &&
+        !target.innerText.includes('[Enter ')
+      ) {
         localStorage.setItem(target.className, target.innerText);
       }
       target.blur();
     }
   } else if (e.type === 'blur') {
-    if (target.innerText.toString().trim() == '' || target.innerText.includes('[Enter ')) {
-      if (target.className === 'name') getName();
-      else if (target.className === 'focus') getFocus();
+    if (
+      target.innerText.toString().trim() == '' ||
+      target.innerText.includes('[Enter ')
+    ) {
+      if (target.className === 'name') {
+        getName();
+      } else if (target.className === 'focus') {
+        getFocus();
+      } else if (target.className === 'weather-location') {
+        getWeatherLocation();
+      }
     } else {
       localStorage.setItem(target.className, target.innerText);
     }
@@ -316,6 +370,11 @@ function setValue(e) {
 }
 
 /* --------- */
+
+// Reset Weather Location
+function resetWeatherLocation() {
+  WEATHERLOCATION.textContent = '';
+}
 
 // Reset Name
 function resetName() {
@@ -329,13 +388,37 @@ function resetFocus() {
 
 /* --------- */
 
+// Get Random Array
+function getRandomArray() {
+  let arraySet = [];
+
+  while (arraySet.length < 6) {
+    arraySet.push(getRandomNumber(1, 20));
+    arraySet = [...new Set(arraySet)];
+  }
+  return arraySet;
+}
+
+/* --------- */
+
+// Get Random Number
+function getRandomNumber(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+/* --------- */
+
 // Get Background
 let currentImage = 0;
+const imageArray = getRandomArray();
+console.log(imageArray);
 
 function getBackground() {
-  const image = [01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-  const index = currentImage % image.length;
-  const imageSrc = image[index] < 10 ? `0${image[index]}` : image[index];
+  const index = currentImage % imageArray.length;
+  const imageSrc =
+    imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
   const currentHour = getTime().hour;
   let backgroundImage = '';
 
@@ -359,22 +442,63 @@ function getBackground() {
   return backgroundImage;
 }
 
+let startScript = (new Date().getHours() + 1) % 24;
+console.log(startScript);
+
+if (new Date().getMinutes() == 0) {
+  renderBackground();
+}
+
+// Set Loop
+function setLoop() {
+  let date = new Date();
+  /* console.log(date); */
+  if (date.getMinutes() == 0 && date.getHours() == startScript) {
+    startScript = (startScript + 1) % 24;
+    console.log(startScript);
+    renderBackground();
+  }
+
+  setTimeout(setLoop, 500);
+}
+
 // Render Background
-function renderBackground() {
-  BODY.style.backgroundImage = `${getBackground()}`;
+async function renderBackground() {
+  BODY.style.backgroundImage = `${await getBackground()}`;
 }
 
 /* --------- */
 
-/* // Render Background To Next
-function renderBackgroundToNext(next) {
-  BODY.style.backgroundImage = `${getBackground()}`;
+// Render Background To Next
+function renderBackgroundNext() {
+  /* BODY.style.backgroundImage = `${getBackground()}`; */
+  let nextImageArray = imageArray;
+  console.log(nextImageArray);
+
+  renderBackground();
+
+  RIGHT.disabled = true;
+
+  setTimeout(function () {
+    RIGHT.disabled = false;
+  }, 1000);
 }
 
 // Render Background To Previous
-function renderBackgroundPrevious(previous) {
-  BODY.style.backgroundImage = `${getBackground()}`;
-} */
+function renderBackgroundPrevious() {
+  /* BODY.style.backgroundImage = `${getBackground()}`; */
+  let previousImageArray = [...imageArray].reverse();
+  /* let previousImage = revertImageArray.reverse(); */
+  console.log(previousImageArray);
+
+  renderBackground();
+
+  LEFT.disabled = true;
+
+  setTimeout(function () {
+    LEFT.disabled = false;
+  }, 1000);
+}
 
 /* --------- */
 

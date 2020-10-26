@@ -6,6 +6,14 @@ html {
 }
 
 body {
+  font-size: 1.6rem;
+  background-image: url(./assets/img/background/overlay.png);
+  background-size: cover;
+  -webkit-transition: background-image 1s ease-in-out;
+  transition: background-image 1s ease-in-out;
+}
+
+.wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -19,38 +27,52 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  height: 100vh;
-  width: 100vw;
   padding: 20px;
-  font-size: 1.6rem;
-  background-image: url(./assets/img/background/overlay.png);
-  background-size: cover;
-  -webkit-transition: background-image 1s ease-in-out;
-  transition: background-image 1s ease-in-out;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* width: 100vw; */
 }
 
-header {
+.wrapper header {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  width: 100%;
+  /* width: 100% */
+  height: 150px;
   white-space: nowrap;
 }
 
-header .weather {
+.wrapper header .info .weather-location {
+  position: relative;
+  white-space: nowrap;
+  outline: none;
+}
+
+.wrapper header .info .weather-location::after {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  display: block;
+  width: 100%;
+  height: 2px;
+  content: '';
+  background-color: #ffffff;
+}
+
+.wrapper header .weather {
   text-align: right;
 }
 
-header .weather .icon {
+.wrapper header .weather .icon {
   display: inline;
   -webkit-filter: drop-shadow(0 0 5px #000000);
           filter: drop-shadow(0 0 5px #000000);
 }
 
-main {
+.wrapper main {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -67,7 +89,7 @@ main {
   text-align: center;
 }
 
-main .time {
+.wrapper main .time {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -79,9 +101,10 @@ main .time {
           align-items: center;
   z-index: 9;
   font-size: 6rem;
+  text-align: center;
 }
 
-main .time span {
+.wrapper main .time span {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -95,20 +118,20 @@ main .time span {
   text-align: center;
 }
 
-main .message {
+.wrapper main .message {
   z-index: 9;
   margin: 10px 100px 20px;
   font-size: 4rem;
   white-space: wrap;
 }
 
-main .message .name {
+.wrapper main .message .name {
   position: relative;
   white-space: nowrap;
   outline: none;
 }
 
-main .message .name::after {
+.wrapper main .message .name::after {
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -119,7 +142,7 @@ main .message .name::after {
   background-color: #ffffff;
 }
 
-main .todo {
+.wrapper main .todo {
   z-index: 9;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -137,12 +160,12 @@ main .todo {
   font-size: 3rem;
 }
 
-main .todo .focus {
+.wrapper main .todo .focus {
   position: relative;
   outline: none;
 }
 
-main .todo .focus::after {
+.wrapper main .todo .focus::after {
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -153,24 +176,22 @@ main .todo .focus::after {
   background-color: #ffffff;
 }
 
-footer {
+.wrapper footer {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: end;
-      -ms-flex-align: end;
-          align-items: flex-end;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  width: 100%;
+  /* width: 100%; */
+  height: 150px;
 }
 
-footer .quote {
+.wrapper footer .quote {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -182,14 +203,14 @@ footer .quote {
           align-items: center;
   width: 100%;
   margin-bottom: 20px;
-  font-size: 3rem;
+  font-size: 2rem;
 }
 
-footer .quote .phrase {
+.wrapper footer .quote .phrase {
   text-align: center;
 }
 
-footer .navigation {
+.wrapper footer .navigation {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -203,32 +224,36 @@ footer .navigation {
           filter: drop-shadow(0 0 5px #000000);
 }
 
-footer .navigation .left,
-footer .navigation .right {
+.wrapper footer .navigation .left,
+.wrapper footer .navigation .right {
   display: block;
   width: 20px;
   height: 20px;
+  border: 0;
   background-size: cover;
   -webkit-transition: 0.1s;
   transition: 0.1s;
+  background-color: transparent;
   cursor: pointer;
 }
 
-footer .navigation .left:active,
-footer .navigation .right:active {
+.wrapper footer .navigation .left:active, .wrapper footer .navigation .left:focus,
+.wrapper footer .navigation .right:active,
+.wrapper footer .navigation .right:focus {
+  outline: 0;
   -webkit-transform: scale(0.9);
           transform: scale(0.9);
 }
 
-footer .navigation .left {
+.wrapper footer .navigation .left {
   background-image: url(./assets/img/navigation/left.svg);
 }
 
-footer .navigation .right {
+.wrapper footer .navigation .right {
   background-image: url(./assets/img/navigation/right.svg);
 }
 
-footer .navigation .link {
+.wrapper footer .navigation .link {
   width: 30px;
   height: 30px;
   background-image: url(./assets/img/navigation/github.svg);
@@ -238,12 +263,12 @@ footer .navigation .link {
   transition: 0.1s;
 }
 
-footer .navigation .link:active {
+.wrapper footer .navigation .link:active {
   -webkit-transform: scale(0.9);
           transform: scale(0.9);
 }
 
-footer .navigation .refresh {
+.wrapper footer .navigation .refresh {
   width: 30px;
   height: 30px;
   background-image: url(./assets/img/navigation/refresh.svg);
@@ -253,12 +278,12 @@ footer .navigation .refresh {
   cursor: pointer;
 }
 
-footer .navigation .refresh:active {
+.wrapper footer .navigation .refresh:active {
   -webkit-transform: scale(0.9);
           transform: scale(0.9);
 }
 
-footer .navigation .request {
+.wrapper footer .navigation .request {
   -webkit-animation: rotation 0.5s infinite linear;
           animation: rotation 0.5s infinite linear;
 }
@@ -286,39 +311,36 @@ footer .navigation .request {
 }
 
 @media screen and (max-width: 768px) {
-  body {
-    padding: 10px;
-  }
-  header {
+  .wrapper header {
     font-size: 1.4rem;
   }
-  main .time {
+  .wrapper main .time {
     font-size: 3rem;
   }
-  main .time span {
+  .wrapper main .time span {
     width: 25px;
   }
-  main .message {
+  .wrapper main .message {
     margin: 10px 50px 20px;
     font-size: 2rem;
     white-space: wrap;
   }
-  main .todo {
+  .wrapper main .todo {
     font-size: 1.5rem;
   }
-  footer .quote {
+  .wrapper footer .quote {
     font-size: 1.5rem;
   }
-  footer .navigation .left,
-  footer .navigation .right {
+  .wrapper footer .navigation .left,
+  .wrapper footer .navigation .right {
     width: 15px;
     height: 15px;
   }
-  footer .navigation .link {
+  .wrapper footer .navigation .link {
     width: 20px;
     height: 20px;
   }
-  footer .navigation .refresh {
+  .wrapper footer .navigation .refresh {
     width: 20px;
     height: 20px;
   }
