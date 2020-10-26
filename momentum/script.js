@@ -160,9 +160,7 @@ function getCurrentDay() {
 
 // Render Day
 function renderDay() {
-  DAY.innerHTML = `<span>${getCurrentDay().month}, ${
-    getCurrentDay().day
-  }</span>`;
+  DAY.innerHTML = `<span>${getCurrentDay().month}, ${getCurrentDay().day}</span>`;
 }
 
 /* --------- */
@@ -172,10 +170,7 @@ function getDate() {
   const currentDate = new Date().getDate();
   const currentYear = new Date().getFullYear();
 
-  const currentNumberMonth =
-    new Date().getMonth() < 10
-      ? `0${new Date().getMonth()}`
-      : new Date().getMonth();
+  const currentNumberMonth = new Date().getMonth() < 10 ? `0${new Date().getMonth()}` : new Date().getMonth();
 
   const objectDate = {
     day: currentDate,
@@ -188,27 +183,16 @@ function getDate() {
 
 // Render Date
 function renderDate() {
-  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${
-    getDate().year
-  }</span>`;
+  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${getDate().year}</span>`;
 }
 
 /* --------- */
 
 // Get Time
 function getTime() {
-  const h =
-    new Date().getHours() < 10
-      ? `0${new Date().getHours()}`
-      : new Date().getHours();
-  const m =
-    new Date().getMinutes() < 10
-      ? `0${new Date().getMinutes()}`
-      : new Date().getMinutes();
-  const s =
-    new Date().getSeconds() < 10
-      ? `0${new Date().getSeconds()}`
-      : new Date().getSeconds();
+  const h = new Date().getHours() < 10 ? `0${new Date().getHours()}` : new Date().getHours();
+  const m = new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes();
+  const s = new Date().getSeconds() < 10 ? `0${new Date().getSeconds()}` : new Date().getSeconds();
 
   const objectTime = {
     hour: h,
@@ -234,8 +218,7 @@ function renderTime() {
 // Get Forecast
 
 function getForecast() {
-  const urlApi =
-    'https://api.openweathermap.org/data/2.5/forecast?q=Minsk,by&APPID=1b6b5070efbf756fbf0bba5241bcc2db';
+  const urlApi = 'https://api.openweathermap.org/data/2.5/forecast?q=Minsk,by&APPID=1b6b5070efbf756fbf0bba5241bcc2db';
 
   const requestApi = fetch(urlApi)
     .then((res) => res.json())
@@ -252,19 +235,11 @@ async function renderForecast() {
   const currentForecast = await getForecast();
 
   WEATHER.innerHTML = `
-    <div class="temperature"><span>${Math.round(
-      currentForecast.list[0].main.temp - 273.15,
-    )}°</span>
-    <img class="icon" src="./assets/img/weather/${
-      currentForecast.list[0].weather[0].icon
-    }.svg" alt="" width="30" /></div>
-    <div class="feels">Feels: ${Math.round(
-      currentForecast.list[0].main.feels_like - 273.15,
-    )}°</div>
+    <div class="temperature"><span>${Math.round(currentForecast.list[0].main.temp - 273.15)}°</span>
+    <img class="icon" src="./assets/img/weather/${currentForecast.list[0].weather[0].icon}.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(currentForecast.list[0].main.feels_like - 273.15)}°</div>
     <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
-    <div class="humidity">Humidity: ${
-      currentForecast.list[0].main.humidity
-    }%</div>
+    <div class="humidity">Humidity: ${currentForecast.list[0].main.humidity}%</div>
   `;
 }
 
@@ -313,8 +288,6 @@ function getWeatherLocation() {
   return loc;
 }
 
-console.log(getWeatherLocation());
-
 // Get Name
 function getName() {
   let loc = localStorage.getItem('name');
@@ -343,19 +316,13 @@ function setValue(e) {
 
   if (e.type === 'keypress') {
     if (e.which == 13 || e.keyCode === 13) {
-      if (
-        !target.innerText.toString().trim() == '' &&
-        !target.innerText.includes('[Enter ')
-      ) {
+      if (!target.innerText.toString().trim() == '' && !target.innerText.includes('[Enter ')) {
         localStorage.setItem(target.className, target.innerText);
       }
       target.blur();
     }
   } else if (e.type === 'blur') {
-    if (
-      target.innerText.toString().trim() == '' ||
-      target.innerText.includes('[Enter ')
-    ) {
+    if (target.innerText.toString().trim() == '' || target.innerText.includes('[Enter ')) {
       if (target.className === 'name') {
         getName();
       } else if (target.className === 'focus') {
@@ -412,13 +379,13 @@ function getRandomNumber(min, max) {
 
 // Get Background
 let currentImage = 0;
+console.log('currentImage Global: ', currentImage);
 const imageArray = getRandomArray();
-console.log(imageArray);
+console.log('Main Array: ', imageArray);
 
 function getBackground() {
   const index = currentImage % imageArray.length;
-  const imageSrc =
-    imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
+  const imageSrc = imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
   const currentHour = getTime().hour;
   let backgroundImage = '';
 
@@ -436,14 +403,14 @@ function getBackground() {
       backgroundImage = `url(./assets/img/background/night/${imageSrc}.jpg)`;
       break;
   }
-  console.log(backgroundImage);
-  console.log(currentImage);
+  console.log('Src of image: ', backgroundImage);
+  console.log('currentImage Local: ', currentImage);
   currentImage++;
   return backgroundImage;
 }
 
 let startScript = (new Date().getHours() + 1) % 24;
-console.log(startScript);
+/* console.log(startScript); */
 
 if (new Date().getMinutes() == 0) {
   renderBackground();
@@ -469,35 +436,60 @@ async function renderBackground() {
 
 /* --------- */
 
-// Render Background To Next
-function renderBackgroundNext() {
-  /* BODY.style.backgroundImage = `${getBackground()}`; */
-  let nextImageArray = imageArray;
-  console.log(nextImageArray);
+/* let currentImageForButton = 0; */
 
-  renderBackground();
+// Get Background Next
+function getBackgroundNext() {
+  let nextImageArray = imageArray;
+  const index = currentImage % nextImageArray.length;
+  const imageSrc = nextImageArray[index] < 10 ? `0${nextImageArray[index]}` : nextImageArray[index];
+  let backgroundImage = `url(./assets/img/background/morning/${imageSrc}.jpg)`;
+  console.log('From Next: ', backgroundImage);
 
   RIGHT.disabled = true;
 
   setTimeout(function () {
     RIGHT.disabled = false;
   }, 1000);
+
+  currentImage++;
+
+  console.log('From Next: ', currentImage);
+  return backgroundImage;
 }
 
-// Render Background To Previous
-function renderBackgroundPrevious() {
-  /* BODY.style.backgroundImage = `${getBackground()}`; */
-  let previousImageArray = [...imageArray].reverse();
-  /* let previousImage = revertImageArray.reverse(); */
-  console.log(previousImageArray);
+// render Background Next
+async function renderBackgroundNext() {
+  BODY.style.backgroundImage = `${await getBackgroundNext()}`;
+}
 
-  renderBackground();
+// Get Background Previous
+function getBackgroundPrevious() {
+  /* let previousImageArray = imageArray; */
+  let previousImageArray = [...imageArray].reverse();
+  const index = currentImage % previousImageArray.length;
+  const imageSrc = previousImageArray[index] < 10 ? `0${previousImageArray[index]}` : previousImageArray[index];
+  let backgroundImage = `url(./assets/img/background/morning/${imageSrc}.jpg)`;
+  console.log('From Prev: ', backgroundImage);
 
   LEFT.disabled = true;
 
   setTimeout(function () {
     LEFT.disabled = false;
   }, 1000);
+
+  currentImage--;
+  if (currentImage < 0) {
+    return (currentImage = 0);
+  }
+
+  console.log('From Prev: ', currentImage);
+  return backgroundImage;
+}
+
+// render Background Previous
+async function renderBackgroundPrevious() {
+  BODY.style.backgroundImage = `${await getBackgroundPrevious()}`;
 }
 
 /* --------- */
