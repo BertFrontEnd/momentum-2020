@@ -163,9 +163,7 @@ function getCurrentDay() {
 
 // Render Day
 function renderDay() {
-  DAY.innerHTML = `<span>${getCurrentDay().month}, ${
-    getCurrentDay().day
-  }</span>`;
+  DAY.innerHTML = `<span>${getCurrentDay().month}, ${getCurrentDay().day}</span>`;
 }
 
 /* --------- */
@@ -175,10 +173,7 @@ function getDate() {
   const currentDate = new Date().getDate();
   const currentYear = new Date().getFullYear();
 
-  const currentNumberMonth =
-    new Date().getMonth() < 10
-      ? `0${new Date().getMonth()}`
-      : new Date().getMonth();
+  const currentNumberMonth = new Date().getMonth() < 10 ? `0${new Date().getMonth()}` : new Date().getMonth();
 
   const objectDate = {
     day: currentDate,
@@ -191,27 +186,16 @@ function getDate() {
 
 // Render Date
 function renderDate() {
-  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${
-    getDate().year
-  }</span>`;
+  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${getDate().year}</span>`;
 }
 
 /* --------- */
 
 // Get Time
 function getTime() {
-  const h =
-    new Date().getHours() < 10
-      ? `0${new Date().getHours()}`
-      : new Date().getHours();
-  const m =
-    new Date().getMinutes() < 10
-      ? `0${new Date().getMinutes()}`
-      : new Date().getMinutes();
-  const s =
-    new Date().getSeconds() < 10
-      ? `0${new Date().getSeconds()}`
-      : new Date().getSeconds();
+  const h = new Date().getHours() < 10 ? `0${new Date().getHours()}` : new Date().getHours();
+  const m = new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes();
+  const s = new Date().getSeconds() < 10 ? `0${new Date().getSeconds()}` : new Date().getSeconds();
 
   const objectTime = {
     hour: h,
@@ -267,19 +251,11 @@ async function renderForecast() {
   currentForecast = await getForecast();
 
   WEATHER.innerHTML = `
-    <div class="temperature"><span>${Math.round(
-      currentForecast.list[0].main.temp - 273.15,
-    )}°</span>
-    <img class="icon" src="./assets/img/weather/${
-      currentForecast.list[0].weather[0].icon
-    }.svg" alt="" width="30" /></div>
-    <div class="feels">Feels: ${Math.round(
-      currentForecast.list[0].main.feels_like - 273.15,
-    )}°</div>
+    <div class="temperature"><span>${Math.round(currentForecast.list[0].main.temp - 273.15)}°</span>
+    <img class="icon" src="./assets/img/weather/${currentForecast.list[0].weather[0].icon}.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(currentForecast.list[0].main.feels_like - 273.15)}°</div>
     <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
-    <div class="humidity">Humidity: ${
-      currentForecast.list[0].main.humidity
-    }%</div>
+    <div class="humidity">Humidity: ${currentForecast.list[0].main.humidity}%</div>
   `;
 }
 
@@ -319,19 +295,11 @@ async function renderForecastOnLoad() {
   currentForecast = await getForecastOnLoad();
 
   WEATHER.innerHTML = `
-    <div class="temperature"><span>${Math.round(
-      currentForecast.list[0].main.temp - 273.15,
-    )}°</span>
-    <img class="icon" src="./assets/img/weather/${
-      currentForecast.list[0].weather[0].icon
-    }.svg" alt="" width="30" /></div>
-    <div class="feels">Feels: ${Math.round(
-      currentForecast.list[0].main.feels_like - 273.15,
-    )}°</div>
+    <div class="temperature"><span>${Math.round(currentForecast.list[0].main.temp - 273.15)}°</span>
+    <img class="icon" src="./assets/img/weather/${currentForecast.list[0].weather[0].icon}.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(currentForecast.list[0].main.feels_like - 273.15)}°</div>
     <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
-    <div class="humidity">Humidity: ${
-      currentForecast.list[0].main.humidity
-    }%</div>
+    <div class="humidity">Humidity: ${currentForecast.list[0].main.humidity}%</div>
   `;
 }
 
@@ -437,19 +405,13 @@ function setValue(e) {
 
   if (e.type === 'keypress') {
     if (e.which == 13 || e.keyCode === 13) {
-      if (
-        !target.innerText.toString().trim() == '' &&
-        !target.innerText.includes('[Enter ')
-      ) {
+      if (!target.innerText.toString().trim() == '' && !target.innerText.includes('[Enter ')) {
         localStorage.setItem(target.className, target.innerText);
       }
       target.blur();
     }
   } else if (e.type === 'blur') {
-    if (
-      target.innerText.toString().trim() == '' ||
-      target.innerText.includes('[Enter ')
-    ) {
+    if (target.innerText.toString().trim() == '' || target.innerText.includes('[Enter ')) {
       if (target.className === 'name') {
         getName();
       } else if (target.className === 'focus') {
@@ -512,8 +474,7 @@ console.log('Main Array: ', imageArray);
 
 function getBackground() {
   const index = currentImage % imageArray.length;
-  const imageSrc =
-    imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
+  const imageSrc = imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
   const currentHour = getTime().hour;
   let backgroundImageUrl = '';
 
@@ -537,6 +498,14 @@ function getBackground() {
   return backgroundImageUrl;
 }
 
+// Render Background
+function renderBackground() {
+  let img = document.createElement('img');
+  let src = getBackground();
+  img.src = src;
+  img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
+}
+
 let startScript = (new Date().getHours() + 1) % 24;
 /* console.log(startScript); */
 
@@ -547,7 +516,6 @@ if (new Date().getMinutes() == 0) {
 // Set Loop
 function setLoop() {
   let date = new Date();
-  /* console.log(date); */
   if (date.getMinutes() == 0 && date.getHours() == startScript) {
     startScript = (startScript + 1) % 24;
     console.log(startScript);
@@ -557,66 +525,46 @@ function setLoop() {
   setTimeout(setLoop, 500);
 }
 
-// Render Background
-function renderBackground() {
-  let img = document.createElement('img');
-  let src = getBackground();
-  img.src = src;
-  img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
-}
-
 /* --------- */
-
-/* let currentImageForButton = 0; */
-
-let tempNumber = 0;
 
 // Get Background Next
 function getBackgroundNext() {
   let nextImageArray = imageArray;
   currentImage = currentImage % 23;
   const index = currentImage % nextImageArray.length;
-  const imageSrc =
-    nextImageArray[index] < 10
-      ? `0${nextImageArray[index]}`
-      : nextImageArray[index];
+  const imageSrc = nextImageArray[index] < 10 ? `0${nextImageArray[index]}` : nextImageArray[index];
   let backgroundImageUrl = '';
-  const currentHour = getTime().hour;
 
   switch (true) {
-    case currentImage >= 0 &&
-      currentImage <= 5 &&
-      currentHour >= 6 &&
-      currentHour < 12:
-      backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
+    case currentImage >= 0 && currentImage <= 5:
+      currentHour = 6;
+      if (currentHour >= 6 && currentHour < 12) {
+        backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
+      }
       break;
-    case currentImage >= 6 &&
-      currentImage <= 11 &&
-      currentHour >= 12 &&
-      currentHour < 18:
-      backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
+    case currentImage >= 6 && currentImage <= 11:
+      currentHour = 12;
+      if (currentHour >= 12 && currentHour < 18) {
+        backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
+      }
       break;
-    case currentImage >= 12 &&
-      currentImage <= 17 &&
-      currentHour >= 18 &&
-      currentHour < 24:
-      backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
+    case currentImage >= 12 && currentImage <= 17:
+      currentHour = 18;
+      if (currentHour >= 18 && currentHour < 24) {
+        backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
+      }
       break;
-    case currentImage >= 18 &&
-      currentImage <= 23 &&
-      currentHour >= 0 &&
-      currentHour < 6:
-      backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
+    case currentImage >= 18 && currentImage <= 23:
+      currentHour = 0;
+      if (currentHour >= 0 && currentHour < 6) {
+        backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
+      }
       break;
   }
 
-  console.log('tempNumber From Next: ', currentImage);
+  console.log('currentImage From Next: ', currentImage);
 
-  /*   if (tempNumber > 5) {
-    RIGHT.disabled = true;
-  } */
-
-  console.log('From Next: ', backgroundImageUrl);
+  console.log('backgroundImageUrl From Next: ', backgroundImageUrl);
 
   RIGHT.disabled = true;
 
@@ -625,11 +573,7 @@ function getBackgroundNext() {
   }, 1000);
 
   currentImage++;
-  console.log('tempNumber From Next After++: ', currentImage);
-
-  /*   if (tempNumber === 5) {
-    return (tempNumber = 0);
-  } */
+  console.log('currentImage From Next After++: ', currentImage);
 
   return backgroundImageUrl;
 }
@@ -645,14 +589,44 @@ function renderBackgroundNext() {
 // Get Background Previous
 function getBackgroundPrevious() {
   /* let previousImageArray = imageArray; */
-  let previousImageArray = [...imageArray].reverse();
-  const index = currentImage % previousImageArray.length;
-  const imageSrc =
-    previousImageArray[index] < 10
-      ? `0${previousImageArray[index]}`
-      : previousImageArray[index];
-  let backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
-  console.log('From Prev: ', backgroundImageUrl);
+  /* let previousImageArray = [...imageArray].reverse(); */
+  let nextImageArray = imageArray;
+  currentImage = currentImage % 23;
+  const index = currentImage % nextImageArray.length;
+  const imageSrc = nextImageArray[index] < 10 ? `0${nextImageArray[index]}` : nextImageArray[index];
+  let backgroundImageUrl = '';
+  currentImage--;
+
+  switch (true) {
+    case currentImage >= 0 && currentImage <= 5:
+      currentHour = 6;
+      if (currentHour >= 6 && currentHour < 12) {
+        backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
+      }
+      break;
+    case currentImage >= 6 && currentImage <= 11:
+      currentHour = 12;
+      if (currentHour >= 12 && currentHour < 18) {
+        backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
+      }
+      break;
+    case currentImage >= 12 && currentImage <= 17:
+      currentHour = 18;
+      if (currentHour >= 18 && currentHour < 24) {
+        backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
+      }
+      break;
+    case currentImage >= 18 && currentImage <= 23:
+      currentHour = 0;
+      if (currentHour >= 0 && currentHour < 6) {
+        backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
+      }
+      break;
+  }
+
+  console.log('currentImage From Prev: ', currentImage);
+
+  console.log('backgroundImageUrl From Prev: ', backgroundImageUrl);
 
   LEFT.disabled = true;
 
@@ -661,11 +635,8 @@ function getBackgroundPrevious() {
   }, 1000);
 
   currentImage--;
-  if (currentImage < 0) {
-    return (currentImage = 0);
-  }
 
-  console.log('From Prev: ', currentImage);
+  console.log('currentImage From Prev: ', currentImage);
   return backgroundImageUrl;
 }
 
