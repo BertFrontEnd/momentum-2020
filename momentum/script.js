@@ -19,10 +19,10 @@ document.addEventListener('DOMContentLoaded', () => {
   setInterval(() => {
     renderTime();
   }, 1);
-  renderLocation();
+  /* renderLocation(); */
   renderDay();
   renderDate();
-  renderForecast();
+  renderForecastOnLoad();
   renderGreeting();
   getWeatherLocation();
   getName();
@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 WEATHERLOCATION.addEventListener('keypress', setValue);
 WEATHERLOCATION.addEventListener('blur', setValue);
 WEATHERLOCATION.addEventListener('click', resetWeatherLocation);
+
+/* WEATHERLOCATION.addEventListener('keypress', renderForecast); */
+WEATHERLOCATION.addEventListener('blur', renderForecast);
 
 NAME.addEventListener('keypress', setValue);
 NAME.addEventListener('blur', setValue);
@@ -55,7 +58,7 @@ LEFT.addEventListener('click', renderBackgroundPrevious);
 
 /* --------- */
 
-// Get Location
+/* // Get Location
 function getLocation() {
   const urlApi = 'https://ipinfo.io?token=5f652187a3f894';
 
@@ -67,13 +70,13 @@ function getLocation() {
     });
 
   return requestApi;
-}
+} */
 
-// Render Location
+/* // Render Location
 async function renderLocation() {
   const objLocation = await getLocation();
   LOCATION.innerHTML = `<span class="location">${objLocation.city}, ${objLocation.country}</span>`;
-}
+} */
 
 /* --------- */
 
@@ -160,7 +163,9 @@ function getCurrentDay() {
 
 // Render Day
 function renderDay() {
-  DAY.innerHTML = `<span>${getCurrentDay().month}, ${getCurrentDay().day}</span>`;
+  DAY.innerHTML = `<span>${getCurrentDay().month}, ${
+    getCurrentDay().day
+  }</span>`;
 }
 
 /* --------- */
@@ -170,7 +175,10 @@ function getDate() {
   const currentDate = new Date().getDate();
   const currentYear = new Date().getFullYear();
 
-  const currentNumberMonth = new Date().getMonth() < 10 ? `0${new Date().getMonth()}` : new Date().getMonth();
+  const currentNumberMonth =
+    new Date().getMonth() < 10
+      ? `0${new Date().getMonth()}`
+      : new Date().getMonth();
 
   const objectDate = {
     day: currentDate,
@@ -183,16 +191,27 @@ function getDate() {
 
 // Render Date
 function renderDate() {
-  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${getDate().year}</span>`;
+  DATE.innerHTML = `<span>${getDate().day}.${+getDate().month + 1}.${
+    getDate().year
+  }</span>`;
 }
 
 /* --------- */
 
 // Get Time
 function getTime() {
-  const h = new Date().getHours() < 10 ? `0${new Date().getHours()}` : new Date().getHours();
-  const m = new Date().getMinutes() < 10 ? `0${new Date().getMinutes()}` : new Date().getMinutes();
-  const s = new Date().getSeconds() < 10 ? `0${new Date().getSeconds()}` : new Date().getSeconds();
+  const h =
+    new Date().getHours() < 10
+      ? `0${new Date().getHours()}`
+      : new Date().getHours();
+  const m =
+    new Date().getMinutes() < 10
+      ? `0${new Date().getMinutes()}`
+      : new Date().getMinutes();
+  const s =
+    new Date().getSeconds() < 10
+      ? `0${new Date().getSeconds()}`
+      : new Date().getSeconds();
 
   const objectTime = {
     hour: h,
@@ -216,15 +235,28 @@ function renderTime() {
 /* --------- */
 
 // Get Forecast
-
 function getForecast() {
-  const urlApi = 'https://api.openweathermap.org/data/2.5/forecast?q=Minsk,by&APPID=1b6b5070efbf756fbf0bba5241bcc2db';
+  const urlApi = `https://api.openweathermap.org/data/2.5/forecast?q=${WEATHERLOCATION.textContent},by&APPID=1b6b5070efbf756fbf0bba5241bcc2db`;
+  console.log(urlApi);
 
   const requestApi = fetch(urlApi)
-    .then((res) => res.json())
-    .then((data) => data)
+    .then((res) => {
+      if (res.status >= 400 && res.status < 500 && res.status != 404) {
+        console.log('Error res');
+      } else {
+        return res.json();
+      }
+    })
+    .then((data) => {
+      if (data.cod == '404') {
+        console.log('Error data');
+        renderErrorApi();
+      } else {
+        return data;
+      }
+    })
     .catch(() => {
-      throw new Error('Something went wrong!');
+      throw new Error(renderErrorFetch());
     });
 
   return requestApi;
@@ -232,15 +264,101 @@ function getForecast() {
 
 // Render Forecast
 async function renderForecast() {
-  const currentForecast = await getForecast();
+  currentForecast = await getForecast();
 
   WEATHER.innerHTML = `
-    <div class="temperature"><span>${Math.round(currentForecast.list[0].main.temp - 273.15)}°</span>
-    <img class="icon" src="./assets/img/weather/${currentForecast.list[0].weather[0].icon}.svg" alt="" width="30" /></div>
-    <div class="feels">Feels: ${Math.round(currentForecast.list[0].main.feels_like - 273.15)}°</div>
+    <div class="temperature"><span>${Math.round(
+      currentForecast.list[0].main.temp - 273.15,
+    )}°</span>
+    <img class="icon" src="./assets/img/weather/${
+      currentForecast.list[0].weather[0].icon
+    }.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(
+      currentForecast.list[0].main.feels_like - 273.15,
+    )}°</div>
     <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
-    <div class="humidity">Humidity: ${currentForecast.list[0].main.humidity}%</div>
+    <div class="humidity">Humidity: ${
+      currentForecast.list[0].main.humidity
+    }%</div>
   `;
+}
+
+// Get Forecast On Load
+function getForecastOnLoad() {
+  const urlApi = `https://api.openweathermap.org/data/2.5/forecast?q=${locationCity},by&APPID=1b6b5070efbf756fbf0bba5241bcc2db`;
+
+  console.log(urlApi);
+
+  const requestApi = fetch(urlApi)
+    .then((res) => {
+      if (res.status >= 400 && res.status < 500 && res.status != 404) {
+        console.log('Error res');
+      } else {
+        return res.json();
+      }
+    })
+    .then((data) => {
+      if (data.cod === '404') {
+        console.log('Error data');
+        renderErrorApi();
+      } else {
+        return data;
+      }
+    })
+    .catch(() => {
+      throw new Error(renderErrorFetch());
+    });
+
+  console.log(requestApi);
+
+  return requestApi;
+}
+
+// Render Forecast On Load
+async function renderForecastOnLoad() {
+  currentForecast = await getForecastOnLoad();
+
+  WEATHER.innerHTML = `
+    <div class="temperature"><span>${Math.round(
+      currentForecast.list[0].main.temp - 273.15,
+    )}°</span>
+    <img class="icon" src="./assets/img/weather/${
+      currentForecast.list[0].weather[0].icon
+    }.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(
+      currentForecast.list[0].main.feels_like - 273.15,
+    )}°</div>
+    <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
+    <div class="humidity">Humidity: ${
+      currentForecast.list[0].main.humidity
+    }%</div>
+  `;
+}
+
+// Render Error Api
+function renderErrorApi() {
+  if (WEATHERLOCATION.textContent === '[Enter Location]') {
+    WEATHER.innerHTML = `<span>No Location</span>`;
+  } else {
+    WEATHER.innerHTML = `
+  <span>Incorrect</span>
+  <span>request</span>
+  <span>to API</span>
+  `;
+  }
+}
+
+// Render Error Fetch
+function renderErrorFetch() {
+  if (WEATHERLOCATION.textContent === '[Enter Location]') {
+    WEATHER.innerHTML = `<span>No Location</span>`;
+  } else {
+    WEATHER.innerHTML = `
+  <span>Wrong request</span>
+  <span>or crashed</span>
+  <span>Internet / Api</span>
+  `;
+  }
 }
 
 /* --------- */
@@ -288,6 +406,9 @@ function getWeatherLocation() {
   return loc;
 }
 
+let locationCity = getWeatherLocation();
+console.log(locationCity);
+
 // Get Name
 function getName() {
   let loc = localStorage.getItem('name');
@@ -316,13 +437,19 @@ function setValue(e) {
 
   if (e.type === 'keypress') {
     if (e.which == 13 || e.keyCode === 13) {
-      if (!target.innerText.toString().trim() == '' && !target.innerText.includes('[Enter ')) {
+      if (
+        !target.innerText.toString().trim() == '' &&
+        !target.innerText.includes('[Enter ')
+      ) {
         localStorage.setItem(target.className, target.innerText);
       }
       target.blur();
     }
   } else if (e.type === 'blur') {
-    if (target.innerText.toString().trim() == '' || target.innerText.includes('[Enter ')) {
+    if (
+      target.innerText.toString().trim() == '' ||
+      target.innerText.includes('[Enter ')
+    ) {
       if (target.className === 'name') {
         getName();
       } else if (target.className === 'focus') {
@@ -385,28 +512,29 @@ console.log('Main Array: ', imageArray);
 
 function getBackground() {
   const index = currentImage % imageArray.length;
-  const imageSrc = imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
+  const imageSrc =
+    imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
   const currentHour = getTime().hour;
-  let backgroundImage = '';
+  let backgroundImageUrl = '';
 
   switch (true) {
     case currentHour >= 6 && currentHour < 12:
-      backgroundImage = `url(./assets/img/background/morning/${imageSrc}.jpg)`;
+      backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
       break;
     case currentHour >= 12 && currentHour < 18:
-      backgroundImage = `url(./assets/img/background/day/${imageSrc}.jpg)`;
+      backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
       break;
     case currentHour >= 18 && currentHour < 24:
-      backgroundImage = `url(./assets/img/background/evening/${imageSrc}.jpg)`;
+      backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
       break;
     case currentHour >= 0 && currentHour < 6:
-      backgroundImage = `url(./assets/img/background/night/${imageSrc}.jpg)`;
+      backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
       break;
   }
-  console.log('Src of image: ', backgroundImage);
+  console.log('Src of image: ', backgroundImageUrl);
   console.log('currentImage Local: ', currentImage);
   currentImage++;
-  return backgroundImage;
+  return backgroundImageUrl;
 }
 
 let startScript = (new Date().getHours() + 1) % 24;
@@ -430,21 +558,65 @@ function setLoop() {
 }
 
 // Render Background
-async function renderBackground() {
-  BODY.style.backgroundImage = `${await getBackground()}`;
+function renderBackground() {
+  let img = document.createElement('img');
+  let src = getBackground();
+  img.src = src;
+  img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
 }
 
 /* --------- */
 
 /* let currentImageForButton = 0; */
 
+let tempNumber = 0;
+
 // Get Background Next
 function getBackgroundNext() {
   let nextImageArray = imageArray;
+  currentImage = currentImage % 23;
   const index = currentImage % nextImageArray.length;
-  const imageSrc = nextImageArray[index] < 10 ? `0${nextImageArray[index]}` : nextImageArray[index];
-  let backgroundImage = `url(./assets/img/background/morning/${imageSrc}.jpg)`;
-  console.log('From Next: ', backgroundImage);
+  const imageSrc =
+    nextImageArray[index] < 10
+      ? `0${nextImageArray[index]}`
+      : nextImageArray[index];
+  let backgroundImageUrl = '';
+  const currentHour = getTime().hour;
+
+  switch (true) {
+    case currentImage >= 0 &&
+      currentImage <= 5 &&
+      currentHour >= 6 &&
+      currentHour < 12:
+      backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
+      break;
+    case currentImage >= 6 &&
+      currentImage <= 11 &&
+      currentHour >= 12 &&
+      currentHour < 18:
+      backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
+      break;
+    case currentImage >= 12 &&
+      currentImage <= 17 &&
+      currentHour >= 18 &&
+      currentHour < 24:
+      backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
+      break;
+    case currentImage >= 18 &&
+      currentImage <= 23 &&
+      currentHour >= 0 &&
+      currentHour < 6:
+      backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
+      break;
+  }
+
+  console.log('tempNumber From Next: ', currentImage);
+
+  /*   if (tempNumber > 5) {
+    RIGHT.disabled = true;
+  } */
+
+  console.log('From Next: ', backgroundImageUrl);
 
   RIGHT.disabled = true;
 
@@ -453,14 +625,21 @@ function getBackgroundNext() {
   }, 1000);
 
   currentImage++;
+  console.log('tempNumber From Next After++: ', currentImage);
 
-  console.log('From Next: ', currentImage);
-  return backgroundImage;
+  /*   if (tempNumber === 5) {
+    return (tempNumber = 0);
+  } */
+
+  return backgroundImageUrl;
 }
 
 // render Background Next
-async function renderBackgroundNext() {
-  BODY.style.backgroundImage = `${await getBackgroundNext()}`;
+function renderBackgroundNext() {
+  let img = document.createElement('img');
+  let src = getBackgroundNext();
+  img.src = src;
+  img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
 }
 
 // Get Background Previous
@@ -468,9 +647,12 @@ function getBackgroundPrevious() {
   /* let previousImageArray = imageArray; */
   let previousImageArray = [...imageArray].reverse();
   const index = currentImage % previousImageArray.length;
-  const imageSrc = previousImageArray[index] < 10 ? `0${previousImageArray[index]}` : previousImageArray[index];
-  let backgroundImage = `url(./assets/img/background/morning/${imageSrc}.jpg)`;
-  console.log('From Prev: ', backgroundImage);
+  const imageSrc =
+    previousImageArray[index] < 10
+      ? `0${previousImageArray[index]}`
+      : previousImageArray[index];
+  let backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
+  console.log('From Prev: ', backgroundImageUrl);
 
   LEFT.disabled = true;
 
@@ -484,12 +666,15 @@ function getBackgroundPrevious() {
   }
 
   console.log('From Prev: ', currentImage);
-  return backgroundImage;
+  return backgroundImageUrl;
 }
 
 // render Background Previous
-async function renderBackgroundPrevious() {
-  BODY.style.backgroundImage = `${await getBackgroundPrevious()}`;
+function renderBackgroundPrevious() {
+  let img = document.createElement('img');
+  let src = getBackgroundPrevious();
+  img.src = src;
+  img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
 }
 
 /* --------- */

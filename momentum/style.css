@@ -45,24 +45,34 @@ body {
   white-space: nowrap;
 }
 
-.wrapper header .info .weather-location {
+.wrapper header .info {
+  /*  width: 160px; */
+}
+
+.wrapper header .info .city .weather-location {
   position: relative;
-  white-space: nowrap;
   outline: none;
 }
 
-.wrapper header .info .weather-location::after {
+.wrapper header .info .city .weather-location::after {
   position: absolute;
-  bottom: -2px;
+  bottom: 0;
   left: 0;
   display: block;
   width: 100%;
-  height: 2px;
+  height: 1px;
   content: '';
   background-color: #ffffff;
 }
 
 .wrapper header .weather {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
   text-align: right;
 }
 
@@ -133,11 +143,11 @@ body {
 
 .wrapper main .message .name::after {
   position: absolute;
-  bottom: -2px;
+  bottom: 0;
   left: 0;
   display: block;
   width: 100%;
-  height: 2px;
+  height: 1px;
   content: '';
   background-color: #ffffff;
 }
@@ -167,11 +177,11 @@ body {
 
 .wrapper main .todo .focus::after {
   position: absolute;
-  bottom: -2px;
+  bottom: 0;
   left: 0;
   display: block;
   width: 100%;
-  height: 2px;
+  height: 1px;
   content: '';
   background-color: #ffffff;
 }
@@ -183,10 +193,14 @@ body {
   -webkit-box-pack: end;
       -ms-flex-pack: end;
           justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  overflow: hidden;
   /* width: 100%; */
   height: 150px;
 }
@@ -201,7 +215,7 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  width: 100%;
+  width: 70%;
   margin-bottom: 20px;
   font-size: 2rem;
 }
