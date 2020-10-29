@@ -20,18 +20,14 @@ body {
   padding: 20px;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
-  /* width: 100vw; */
 
   header {
     display: flex;
     justify-content: space-between;
-    /* width: 100% */
     height: 150px;
     white-space: nowrap;
 
     .info {
-      /*  width: 160px; */
-
       .city {
         .weather-location {
           position: relative;
@@ -166,14 +162,14 @@ body {
       width: 100%;
       filter: drop-shadow(0 0 5px #000000);
 
-      .left,
       .right {
         display: block;
-        width: 20px;
-        height: 20px;
+        width: 35px;
+        height: 35px;
         border: 0;
         background-size: cover;
         transition: 0.1s;
+        background-image: url(./assets/img/navigation/image.svg);
         background-color: transparent;
         cursor: pointer;
 
@@ -182,14 +178,6 @@ body {
           outline: 0;
           transform: scale(0.9);
         }
-      }
-
-      .left {
-        background-image: url(./assets/img/navigation/left.svg);
-      }
-
-      .right {
-        background-image: url(./assets/img/navigation/right.svg);
       }
 
       .link {
@@ -266,10 +254,9 @@ body {
       }
 
       .navigation {
-        .left,
         .right {
-          width: 15px;
-          height: 15px;
+          width: 24px;
+          height: 24px;
         }
 
         .link {

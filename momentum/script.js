@@ -11,7 +11,6 @@ const GREETING = document.querySelector('.greeting');
 const PHRASE = document.querySelector('.phrase');
 const REFRESH = document.querySelector('.refresh');
 const BODY = document.querySelector('body');
-const LEFT = document.querySelector('.left');
 const RIGHT = document.querySelector('.right');
 
 // Handlers
@@ -37,7 +36,6 @@ WEATHERLOCATION.addEventListener('keypress', setValue);
 WEATHERLOCATION.addEventListener('blur', setValue);
 WEATHERLOCATION.addEventListener('click', resetWeatherLocation);
 
-/* WEATHERLOCATION.addEventListener('keypress', renderForecast); */
 WEATHERLOCATION.addEventListener('blur', renderForecast);
 
 NAME.addEventListener('keypress', setValue);
@@ -52,33 +50,8 @@ REFRESH.addEventListener('click', renderPhrase);
 REFRESH.addEventListener('click', addAnimation);
 
 RIGHT.addEventListener('click', renderBackgroundNext);
-LEFT.addEventListener('click', renderBackgroundPrevious);
 
 /* Functions */
-
-/* --------- */
-
-/* // Get Location
-function getLocation() {
-  const urlApi = 'https://ipinfo.io?token=5f652187a3f894';
-
-  const requestApi = fetch(urlApi)
-    .then((res) => res.json())
-    .then((data) => data)
-    .catch(() => {
-      throw new Error('Something went wrong!');
-    });
-
-  return requestApi;
-} */
-
-/* // Render Location
-async function renderLocation() {
-  const objLocation = await getLocation();
-  LOCATION.innerHTML = `<span class="location">${objLocation.city}, ${objLocation.country}</span>`;
-} */
-
-/* --------- */
 
 // Get Day
 function getCurrentDay() {
@@ -220,8 +193,8 @@ function renderTime() {
 
 // Get Forecast
 function getForecast() {
-  const urlApi = `https://api.openweathermap.org/data/2.5/forecast?q=${WEATHERLOCATION.textContent},by&APPID=1b6b5070efbf756fbf0bba5241bcc2db`;
-  console.log(urlApi);
+  const idApi = `1b6b5070efbf756fbf0bba5241bcc2db`;
+  const urlApi = `https://api.openweathermap.org/data/2.5/weather?q=${WEATHERLOCATION.textContent}&appid=${idApi}`;
 
   const requestApi = fetch(urlApi)
     .then((res) => {
@@ -251,19 +224,18 @@ async function renderForecast() {
   currentForecast = await getForecast();
 
   WEATHER.innerHTML = `
-    <div class="temperature"><span>${Math.round(currentForecast.list[0].main.temp - 273.15)}°</span>
-    <img class="icon" src="./assets/img/weather/${currentForecast.list[0].weather[0].icon}.svg" alt="" width="30" /></div>
-    <div class="feels">Feels: ${Math.round(currentForecast.list[0].main.feels_like - 273.15)}°</div>
-    <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
-    <div class="humidity">Humidity: ${currentForecast.list[0].main.humidity}%</div>
+    <div class="temperature"><span>${Math.round(currentForecast.main.temp - 273.15)}°</span>
+    <img class="icon" src="./assets/img/weather/${currentForecast.weather[0].icon}.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(currentForecast.main.feels_like - 273.15)}°</div>
+    <div class="wind">Wind: ${currentForecast.wind.speed} m/s</div>
+    <div class="humidity">Humidity: ${currentForecast.main.humidity}%</div>
   `;
 }
 
 // Get Forecast On Load
 function getForecastOnLoad() {
-  const urlApi = `https://api.openweathermap.org/data/2.5/forecast?q=${locationCity},by&APPID=1b6b5070efbf756fbf0bba5241bcc2db`;
-
-  console.log(urlApi);
+  const idApi = `1b6b5070efbf756fbf0bba5241bcc2db`;
+  const urlApi = `https://api.openweathermap.org/data/2.5/weather?q=${locationCity}&appid=${idApi}`;
 
   const requestApi = fetch(urlApi)
     .then((res) => {
@@ -285,8 +257,6 @@ function getForecastOnLoad() {
       throw new Error(renderErrorFetch());
     });
 
-  console.log(requestApi);
-
   return requestApi;
 }
 
@@ -295,11 +265,11 @@ async function renderForecastOnLoad() {
   currentForecast = await getForecastOnLoad();
 
   WEATHER.innerHTML = `
-    <div class="temperature"><span>${Math.round(currentForecast.list[0].main.temp - 273.15)}°</span>
-    <img class="icon" src="./assets/img/weather/${currentForecast.list[0].weather[0].icon}.svg" alt="" width="30" /></div>
-    <div class="feels">Feels: ${Math.round(currentForecast.list[0].main.feels_like - 273.15)}°</div>
-    <div class="wind">Wind: ${currentForecast.list[0].wind.speed} m/s</div>
-    <div class="humidity">Humidity: ${currentForecast.list[0].main.humidity}%</div>
+    <div class="temperature"><span>${Math.round(currentForecast.main.temp - 273.15)}°</span>
+    <img class="icon" src="./assets/img/weather/${currentForecast.weather[0].icon}.svg" alt="" width="30" /></div>
+    <div class="feels">Feels: ${Math.round(currentForecast.main.feels_like - 273.15)}°</div>
+    <div class="wind">Wind: ${currentForecast.wind.speed} m/s</div>
+    <div class="humidity">Humidity: ${currentForecast.main.humidity}%</div>
   `;
 }
 
@@ -375,7 +345,6 @@ function getWeatherLocation() {
 }
 
 let locationCity = getWeatherLocation();
-console.log(locationCity);
 
 // Get Name
 function getName() {
@@ -466,48 +435,39 @@ function getRandomNumber(min, max) {
 
 /* --------- */
 
-// Get Background
-let currentImage = 0;
-console.log('currentImage Global: ', currentImage);
-const imageArray = getRandomArray();
-console.log('Main Array: ', imageArray);
+// Set Background
+let counter = 0;
 
-function getBackground() {
-  const index = currentImage % imageArray.length;
-  const imageSrc = imageArray[index] < 10 ? `0${imageArray[index]}` : imageArray[index];
-  const currentHour = getTime().hour;
-  let backgroundImageUrl = '';
+const imageArray = getRandomArray().map((element) => {
+  return (element = element < 10 ? `0${element}` : element.toString());
+});
 
-  switch (true) {
-    case currentHour >= 6 && currentHour < 12:
-      backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
-      break;
-    case currentHour >= 12 && currentHour < 18:
-      backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
-      break;
-    case currentHour >= 18 && currentHour < 24:
-      backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
-      break;
-    case currentHour >= 0 && currentHour < 6:
-      backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
-      break;
-  }
-  console.log('Src of image: ', backgroundImageUrl);
-  console.log('currentImage Local: ', currentImage);
-  currentImage++;
-  return backgroundImageUrl;
-}
+const timeOfDayArray = ['night', 'morning', 'day', 'evening'];
 
-// Render Background
-function renderBackground() {
+const timeOfDayObject = {
+  night: imageArray,
+  morning: imageArray,
+  day: imageArray,
+  evening: imageArray,
+};
+
+function setBackground() {
+  let folder = timeOfDayArray[Math.floor((counter % 24) / 6)];
+  let imageNumber = counter % 6;
+
   let img = document.createElement('img');
-  let src = getBackground();
+  let src = `assets/img/background/${folder}/${timeOfDayObject[folder][imageNumber]}.jpg`;
   img.src = src;
   img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
 }
 
+// Render Background
+function renderBackground() {
+  counter++;
+  setBackground();
+}
+
 let startScript = (new Date().getHours() + 1) % 24;
-/* console.log(startScript); */
 
 if (new Date().getMinutes() == 0) {
   renderBackground();
@@ -527,125 +487,16 @@ function setLoop() {
 
 /* --------- */
 
-// Get Background Next
-function getBackgroundNext() {
-  let nextImageArray = imageArray;
-  currentImage = currentImage % 23;
-  const index = currentImage % nextImageArray.length;
-  const imageSrc = nextImageArray[index] < 10 ? `0${nextImageArray[index]}` : nextImageArray[index];
-  let backgroundImageUrl = '';
-
-  switch (true) {
-    case currentImage >= 0 && currentImage <= 5:
-      currentHour = 6;
-      if (currentHour >= 6 && currentHour < 12) {
-        backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
-      }
-      break;
-    case currentImage >= 6 && currentImage <= 11:
-      currentHour = 12;
-      if (currentHour >= 12 && currentHour < 18) {
-        backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
-      }
-      break;
-    case currentImage >= 12 && currentImage <= 17:
-      currentHour = 18;
-      if (currentHour >= 18 && currentHour < 24) {
-        backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
-      }
-      break;
-    case currentImage >= 18 && currentImage <= 23:
-      currentHour = 0;
-      if (currentHour >= 0 && currentHour < 6) {
-        backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
-      }
-      break;
-  }
-
-  console.log('currentImage From Next: ', currentImage);
-
-  console.log('backgroundImageUrl From Next: ', backgroundImageUrl);
+// render Background Next
+function renderBackgroundNext() {
+  counter++;
+  setBackground();
 
   RIGHT.disabled = true;
 
   setTimeout(function () {
     RIGHT.disabled = false;
   }, 1000);
-
-  currentImage++;
-  console.log('currentImage From Next After++: ', currentImage);
-
-  return backgroundImageUrl;
-}
-
-// render Background Next
-function renderBackgroundNext() {
-  let img = document.createElement('img');
-  let src = getBackgroundNext();
-  img.src = src;
-  img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
-}
-
-// Get Background Previous
-function getBackgroundPrevious() {
-  /* let previousImageArray = imageArray; */
-  /* let previousImageArray = [...imageArray].reverse(); */
-  let nextImageArray = imageArray;
-  currentImage = currentImage % 23;
-  const index = currentImage % nextImageArray.length;
-  const imageSrc = nextImageArray[index] < 10 ? `0${nextImageArray[index]}` : nextImageArray[index];
-  let backgroundImageUrl = '';
-  currentImage--;
-
-  switch (true) {
-    case currentImage >= 0 && currentImage <= 5:
-      currentHour = 6;
-      if (currentHour >= 6 && currentHour < 12) {
-        backgroundImageUrl = `assets/img/background/morning/${imageSrc}.jpg`;
-      }
-      break;
-    case currentImage >= 6 && currentImage <= 11:
-      currentHour = 12;
-      if (currentHour >= 12 && currentHour < 18) {
-        backgroundImageUrl = `assets/img/background/day/${imageSrc}.jpg`;
-      }
-      break;
-    case currentImage >= 12 && currentImage <= 17:
-      currentHour = 18;
-      if (currentHour >= 18 && currentHour < 24) {
-        backgroundImageUrl = `assets/img/background/evening/${imageSrc}.jpg`;
-      }
-      break;
-    case currentImage >= 18 && currentImage <= 23:
-      currentHour = 0;
-      if (currentHour >= 0 && currentHour < 6) {
-        backgroundImageUrl = `assets/img/background/night/${imageSrc}.jpg`;
-      }
-      break;
-  }
-
-  console.log('currentImage From Prev: ', currentImage);
-
-  console.log('backgroundImageUrl From Prev: ', backgroundImageUrl);
-
-  LEFT.disabled = true;
-
-  setTimeout(function () {
-    LEFT.disabled = false;
-  }, 1000);
-
-  currentImage--;
-
-  console.log('currentImage From Prev: ', currentImage);
-  return backgroundImageUrl;
-}
-
-// render Background Previous
-function renderBackgroundPrevious() {
-  let img = document.createElement('img');
-  let src = getBackgroundPrevious();
-  img.src = src;
-  img.onload = () => (BODY.style.backgroundImage = `url(${src})`);
 }
 
 /* --------- */
